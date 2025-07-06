@@ -1,4 +1,7 @@
 venv/
 __pycache__/
+*.h5
+*.keras
 *.pyc
 .DS_Store
+*.pkl
