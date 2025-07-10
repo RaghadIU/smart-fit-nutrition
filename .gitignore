@@ -1,7 +1,18 @@
+# Ignore virtual environments
 venv/
 __pycache__/
+*.pyc
+
+# Ignore model files (too large for GitHub)
 *.h5
 *.keras
-*.pyc
+
+# Ignore system files
 .DS_Store
-*.pkl
+Thumbs.db
+
+# Ignore image datasets or temp files
+*.jpg
+*.jpeg
+*.png
+
