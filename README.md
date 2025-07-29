@@ -29,6 +29,12 @@ pip install -r requirements.txt
 ```bash 
 streamlit run app.py
 ```
+## View the app in your browser
+```bash 
+ http://localhost:8501
+```
+The app runs locally on your machine
+
 ------
 ## features 
 - Analyze uploaded food images and predict the food class from a selected list
