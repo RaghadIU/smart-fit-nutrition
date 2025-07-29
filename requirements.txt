@@ -1,4 +1,6 @@
 tensorflow==2.15.0
-streamlit
+keras==2.15.0          # keep tf/keras in sync
+streamlit==1.34.0
 numpy
 pillow
+gdown

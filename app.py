@@ -2,6 +2,7 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+import os
 
 # Selected classes
 selected_classes = ['pizza', 'sushi', 'falafel', 'waffles', 'ice_cream']
@@ -15,43 +16,25 @@ nutrition_info = {
     'ice_cream': {'calories': 270, 'protein': 3.5, 'carbs': 24, 'fat': 11}
 }
 
-# Burn durations in minutes (approx) for different activities
+# Burn durations in minutes (approx)
 burn_methods = {
-    'walking': {
-        'pizza': 60,
-        'sushi': 40,
-        'falafel': 80,
-        'waffles': 70,
-        'ice_cream': 55
-    },
-    'running': {
-        'pizza': 30,
-        'sushi': 20,
-        'falafel': 40,
-        'waffles': 35,
-        'ice_cream': 25
-    },
-    'cycling': {
-        'pizza': 45,
-        'sushi': 30,
-        'falafel': 60,
-        'waffles': 50,
-        'ice_cream': 40
-    },
-    'yoga': {
-        'pizza': 75,
-        'sushi': 55,
-        'falafel': 100,
-        'waffles': 90,
-        'ice_cream': 70
-    }
+    'walking': {'pizza': 60, 'sushi': 40, 'falafel': 80, 'waffles': 70, 'ice_cream': 55},
+    'running': {'pizza': 30, 'sushi': 20, 'falafel': 40, 'waffles': 35, 'ice_cream': 25},
+    'cycling': {'pizza': 45, 'sushi': 30, 'falafel': 60, 'waffles': 50, 'ice_cream': 40},
+    'yoga':    {'pizza': 75, 'sushi': 55, 'falafel': 100, 'waffles': 90, 'ice_cream': 70}
 }
 
-# Load the trained model
-model = tf.keras.models.load_model('food_cnn_mobilenetv2_selected.h5')
+# Load the trained model from local file
+model_path = "food_cnn_small.h5"
+
+if not os.path.exists(model_path):
+    st.error(f"Model file '{model_path}' not found! Please put the model file in the project folder.")
+    st.stop()
+
+model = tf.keras.models.load_model(model_path)
 IMG_SIZE = 224
 
-# Preprocess the image
+# Preprocess image
 def preprocess_image(image):
     image = image.resize((IMG_SIZE, IMG_SIZE))
     img_array = tf.keras.preprocessing.image.img_to_array(image)
@@ -62,9 +45,9 @@ def preprocess_image(image):
 # App UI
 st.set_page_config(page_title="SmartFit Nutrition Analyzer", layout="centered")
 st.title("🍽️ SmartFit Nutrition Analyzer")
-st.markdown("Upload a food image to get predictions and burn estimates.")
+st.markdown("Upload a food image to get predictions, nutrition facts, and burn estimates.")
 
-uploaded_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("📤 Upload Food Image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file).convert('RGB')
@@ -83,13 +66,11 @@ if uploaded_file is not None:
 
     # Primary result
     top_class = selected_classes[top_indices[0]]
-
-    # Get nutrition details
     nutrition = nutrition_info.get(top_class, None)
 
     st.markdown("---")
     st.subheader(f"🍔 Detected Food: **{top_class.capitalize()}**")
-    
+
     if nutrition:
         st.write(f"🔥 **Calories:** {nutrition['calories']} kcal")
         st.write(f"💪 **Protein:** {nutrition['protein']} g")
