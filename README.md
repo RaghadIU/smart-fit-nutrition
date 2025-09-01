@@ -11,7 +11,7 @@ SmartFit Nutrition Analyzer is an interactive web app that analyzes food images 
 ## Installation
 
 ```bash
-git clone <https://github.com/RaghadIU/smart-fit-nutrition.git> 
+git clone https://github.com/RaghadIU/smart-fit-nutrition.git
 ```
 ```bash
 cd smartfit-nutrition-app
